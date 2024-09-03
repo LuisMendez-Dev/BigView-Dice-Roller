@@ -2,6 +2,7 @@ export interface DiceType {
   sides: number;
   name: string;
   img: string;
+  color: string;
 }
 
 export interface DiceContextType {
