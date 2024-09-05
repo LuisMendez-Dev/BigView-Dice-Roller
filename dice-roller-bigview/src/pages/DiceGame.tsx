@@ -1,121 +1,86 @@
-import { Button, Image } from '@nextui-org/react';
-import { DiceType, RollResultType } from '../types/gameTypes';
-
 import DiceContext from '../context/diceDataContext';
 import DiceDisplay from '../components/DiceDisplay';
 import DiceSelector from '../components/DiceSelector';
-import DnDLogo from '../assets/images/dndLogo.png';
-import Footer from '../components/Footer';
-import { randomDiceRoll } from '../utils/diceRollAlgorithm';
-import { useState } from 'react';
+import GameButton from '../components/GameButton';
+import GameHistory from '../components/GameHistory';
+import Title from '../components/Title';
+import useDiceGame from '../hooks/useDiceGame';
+import { useMemo } from 'react';
 
-function DiceGame() {
-	const [selectedDices, setSelectedDices] = useState<DiceType[]>([]);
-	const [rollResult, setRollResult] = useState<RollResultType[]>([]);
-	const [isLoading, setIsLoading] = useState<boolean>(false);
+const DiceGame = () => {
+  const {
+    selectedDices,
+    setSelectedDices,
+    rollResult,
+    history,
+    isLoading,
+    handleRoll,
+    handleResetGame,
+    handleDelete,
+    handleResetHistory,
+  } = useDiceGame();
 
-	const handleRoll = () => {
-		if (selectedDices.length > 0) setRollResult([]);
-		setIsLoading(true);
-		const result = selectedDices.map((dice) => {
-			const randomNumber = randomDiceRoll(dice.sides);
-			return { name: dice.name, result: randomNumber };
-		});
+  const totalRollResult = useMemo(
+    () => rollResult.reduce((acc, curr) => acc + (curr.result ?? 0), 0),
+    [rollResult]
+  );
 
-		setTimeout(() => {
-			setRollResult(result);
-			setIsLoading(false);
-		}, 1500);
-	};
+  return (
+    <DiceContext.Provider value={{ selectedDices, setSelectedDices }}>
+      <div className='mt-10 flex h-full w-full flex-col items-center justify-center gap-10 lg:mb-5'>
+        <Title />
+        <div className='flex w-full max-w-7xl flex-col items-center justify-center md:w-[95%] lg:flex-row lg:gap-10'>
+          {/* GAME SECTION */}
+          <div className='flex w-[95%] flex-col'>
+            <DiceSelector />
 
-	const handleReset = () => {
-		setSelectedDices([]);
-		setRollResult([]);
-	};
+            <DiceDisplay
+              rollResult={rollResult}
+              loadingState={isLoading}
+              handleDelete={handleDelete}
+            />
 
-	const handleDelete = (index: number) => {
-		const selectedDicesModification = selectedDices.filter((_, i) => i !== index);
-		setSelectedDices(selectedDicesModification);
-		setRollResult([...rollResult.filter((_, i) => i !== index)]);
-	};
+            <div className='mt-5 flex w-full flex-col items-center justify-center gap-8 md:flex-row md:justify-between'>
+              <div
+                className={`flex flex-row items-center justify-center gap-10 ${totalRollResult === 0 && 'w-full'}`}
+              >
+                <GameButton
+                  selectedDices={selectedDices}
+                  isLoading={isLoading}
+                  handleRoll={handleRoll}
+                  handleResetGame={handleResetGame}
+                  variants={['roll', 'reset']}
+                />
+              </div>
 
-	return (
-		<DiceContext.Provider value={{ selectedDices, setSelectedDices }}>
-			<div className='flex flex-col items-center justify-center h-lvh w-full mt-10'>
-				<div className='flex'>
-					<Image
-						src={DnDLogo}
-						alt='Dice Roller'
-						className='w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 lg:w-24 lg:h-24 xl:w-24 xl:h-24'
-					/>
-					<h1 className='text-4xl sm:text-5xl md:text-6xl lg:text-6xl xl:text-6xl font-bold text-black flex items-center'>
-						Dice Roller
-					</h1>
-				</div>
+              {totalRollResult > 0 && (
+                <h2 className='w-1/3 rounded-md bg-neutral-100 p-2 text-center text-3xl font-bold text-black'>
+                  {totalRollResult}
+                </h2>
+              )}
+            </div>
+          </div>
 
-				<div className='flex flex-col justify-center items-center mt-7'>
-					<DiceSelector />
-					<DiceDisplay
-						rollResult={rollResult}
-						loadingState={isLoading}
-						handleDelete={handleDelete}
-					/>
+          {/* HISTORY SECTION */}
+          <div className='mb-5 mt-10 flex w-[95%] flex-col justify-center gap-5 md:w-[95%] lg:mb-0 lg:mt-20 lg:w-[75%]'>
+            <GameHistory rollHistory={history} />
 
-					<div
-						className='
-						flex
-						flex-col
-						sm:flex-row
-						justify-between
-						items-center
-						w-full
-						my-2
-					'>
-						<div
-							className={`
-						flex
-						flex-row
-						justify-center
-						items-center
-						my-2
-						${rollResult.length === 0 ? 'w-full' : 'w-1/2'}
-						`}>
-							<Button
-								className='bg-green-500 hover:bg-green-700 text-white font-bold my-3 w-1/2 mx-5'
-								isDisabled={selectedDices.length === 0}
-								onClick={handleRoll}>
-								Roll
-							</Button>
-
-							<Button
-								className='bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-4 w-1/2 mx-5'
-								isDisabled={selectedDices.length === 0}
-								onClick={handleReset}>
-								Reset
-							</Button>
-						</div>
-
-						{rollResult.length > 0 && (
-							<h2
-								className='
-						text-3xl
-						font-semibold
-						text-black
-						p-3
-						text-center
-						my-5
-						border-2
-						rounded-md
-						'>
-								{rollResult.reduce((acc, curr) => acc + (curr.result ?? 0), 0)}
-							</h2>
-						)}
-					</div>
-				</div>
-			</div>
-			<Footer />
-		</DiceContext.Provider>
-	);
-}
+            {history.length > 0 && (
+              <GameButton
+                selectedDices={selectedDices}
+                isLoading={isLoading}
+                handleRoll={handleRoll}
+                handleResetGame={handleResetGame}
+                handleResetHistory={handleResetHistory}
+                variants={['resetHistory', 'downloadHistory']}
+                rollHistory={history}
+              />
+            )}
+          </div>
+        </div>
+      </div>
+    </DiceContext.Provider>
+  );
+};
 
 export default DiceGame;

@@ -15,3 +15,10 @@ export interface RollResultType {
   result?: number;
 }
 
+export interface RollHistoryType {
+  totalResult: number;
+  dices: DiceType[];
+  dicesResults: RollResultType[];
+  resultTime: string;
+}
+

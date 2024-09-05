@@ -4,37 +4,31 @@ import { MAX_DICES, assignIcon, dicesData } from '../utils/diceData.ts';
 import DiceContext from '../context/diceDataContext.ts';
 import { useContext } from 'react';
 
-function DiceSelector() {
-	const { selectedDices, setSelectedDices } = useContext(DiceContext);
+const DiceSelector = () => {
+  const { selectedDices, setSelectedDices } = useContext(DiceContext);
 
-	return (
-		<div
-			className='
-			flex
-			flex-row
-			flex-wrap
-			justify-center
-			items-center
-		'>
-			{dicesData.map((dice, index) => (
-				<Button
-					key={index}
-					variant='shadow'
-					className={`h-15 w-15 sm:h-24 sm:w-24 my-3 mx-5 border-2 rounded-full p-4 hover:bg-opacity-75 ${dice.color}`}
-					onClick={() => {
-						const selectedDicesModification = [...selectedDices, dice];
-						setSelectedDices(selectedDicesModification);
-					}}
-					isDisabled={selectedDices.length === MAX_DICES}>
-					<Image
-						src={assignIcon(dice.name)}
-						alt={dice.name}
-						className='w-auto h-12'
-					/>
-				</Button>
-			))}
-		</div>
-	);
-}
+  return (
+    <div className='mb-4 flex flex-row flex-wrap items-center justify-center'>
+      {dicesData.map((dice, index) => (
+        <Button
+          key={index}
+          variant='shadow'
+          className={`mx-3 my-2 h-20 w-16 rounded-full p-5 hover:bg-opacity-75 sm:h-20 sm:w-16 ${dice.color} lg:w-15 lg:h-15 shadow-gray-300 lg:mx-1 xl:mx-3`}
+          onClick={() => {
+            const selectedDicesModification = [...selectedDices, dice];
+            setSelectedDices(selectedDicesModification);
+          }}
+          isDisabled={selectedDices.length === MAX_DICES}
+        >
+          <Image
+            src={assignIcon(dice.name)}
+            alt={dice.name}
+            className='h-auto w-auto'
+          />
+        </Button>
+      ))}
+    </div>
+  );
+};
 
 export default DiceSelector;
