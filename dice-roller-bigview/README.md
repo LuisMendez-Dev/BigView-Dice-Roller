@@ -38,3 +38,8 @@ npm run dev
 ```
 http://localhost:####
 ```
+## Créditos
+
+- Iconos: [iconos8](https://iconos8.es/icons) | [flaticons](https://www.flaticon.es/)
+- Dados: [Lonnie Tapscott - Noun Project](https://thenounproject.com/browse/collection-icon/polyhedral-dice-73191/?p=1)
+- Documentación: [Tailwind](https://tailwindcss.com/) | [Next UI](https://nextui.org/) | [React](https://react.dev/learn) | [MDN](https://developer.mozilla.org/en-US/) |  [GPT 4o](https://chatgpt.com/)
