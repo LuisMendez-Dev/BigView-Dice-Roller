@@ -11,8 +11,8 @@ export interface DiceContextType {
 }
 
 export interface RollResultType {
-  name?: string;
-  result?: number;
+  name: string;
+  result: number;
 }
 
 export interface RollHistoryType {
@@ -21,4 +21,3 @@ export interface RollHistoryType {
   dicesResults: RollResultType[];
   resultTime: string;
 }
-

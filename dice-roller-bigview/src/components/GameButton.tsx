@@ -34,6 +34,7 @@ const GameButton = ({
           startContent: (
             <Image src={TrashIcon} alt='Reset Icon' width={20} height={20} />
           ),
+          ariaLabel: 'Reset Game',
         };
       case 'roll':
         return {
@@ -44,6 +45,7 @@ const GameButton = ({
           startContent: (
             <Image src={DiceIcon} alt='Roll Icon' width={20} height={20} />
           ),
+          ariaLabel: 'Roll Dice',
         };
       case 'resetHistory':
         return {
@@ -52,8 +54,14 @@ const GameButton = ({
           hover: 'bg-red-100',
           onClick: handleResetHistory,
           startContent: (
-            <Image src={TrashIcon} alt='Reset Icon' width={20} height={20} />
+            <Image
+              src={TrashIcon}
+              alt='Reset History Icon'
+              width={20}
+              height={20}
+            />
           ),
+          ariaLabel: 'Reset History',
         };
       case 'downloadHistory':
         return {
@@ -64,11 +72,12 @@ const GameButton = ({
           startContent: (
             <Image
               src={DownloadIcon}
-              alt='Download Icon'
+              alt='Download History Icon'
               width={20}
               height={20}
             />
           ),
+          ariaLabel: 'Download History',
         };
       default:
         return {};
@@ -76,20 +85,24 @@ const GameButton = ({
   };
 
   return (
-    <div className={`flex items-center justify-center gap-5 sm:p-5`}>
-      {variants.map(variant => (
-        <Button
-          key={variant}
-          className={`rounded-md border-2 ${variantDecider(variant).border} ${variantDecider(variant).bg} hover:${variantDecider(variant).hover} `}
-          isDisabled={
-            (selectedDices.length === 0 &&
-              (variant === 'reset' || variant === 'roll')) ||
-            isLoading
-          }
-          onClick={variantDecider(variant).onClick}
-          startContent={variantDecider(variant).startContent}
-        />
-      ))}
+    <div className='flex items-center justify-center gap-5 sm:p-5'>
+      {variants.map(variant => {
+        const variantConfig = variantDecider(variant);
+        return (
+          <Button
+            key={variant}
+            className={`rounded-md border-2 ${variantConfig.border} ${variantConfig.bg} hover:${variantConfig.hover}`}
+            isDisabled={
+              (selectedDices.length === 0 &&
+                (variant === 'reset' || variant === 'roll')) ||
+              isLoading
+            }
+            onClick={variantConfig.onClick}
+            startContent={variantConfig.startContent}
+            aria-label={variantConfig.ariaLabel}
+          />
+        );
+      })}
     </div>
   );
 };

@@ -5,54 +5,49 @@ import D6Icon from '../assets/images/D6-bg.png';
 import D8Icon from '../assets/images/D8-bg.png';
 import { DiceType } from '../types/gameTypes';
 
+export const MAX_DICES = 6;
+
 export const dicesData: DiceType[] = [
   {
     sides: 4,
     name: 'D4',
-    img: '../assets/images/D4-bg.png',
+    img: D4Icon,
     color: 'bg-red-300',
   },
   {
     sides: 6,
     name: 'D6',
-    img: '../assets/images/D6-bg.png',
+    img: D6Icon,
     color: 'bg-yellow-300',
   },
   {
     sides: 8,
     name: 'D8',
-    img: '../assets/images/D8-bg.png',
+    img: D8Icon,
     color: 'bg-purple-300',
   },
   {
     sides: 10,
     name: 'D10',
-    img: '../assets/images/D10-bg.png',
+    img: D10Icon,
     color: 'bg-orange-300',
   },
   {
     sides: 12,
     name: 'D12',
-    img: '../assets/images/D12-bg.png',
+    img: D12Icon,
     color: 'bg-blue-200',
   },
 ];
 
-export const MAX_DICES = 6;
+export const assignIcon = (diceName: string): string => {
+  const diceIcons: { [key: string]: string } = {
+    D4: D4Icon,
+    D6: D6Icon,
+    D8: D8Icon,
+    D10: D10Icon,
+    D12: D12Icon,
+  };
 
-export const assignIcon = (diceName: string) => {
-  switch (diceName) {
-    case 'D4':
-      return D4Icon;
-    case 'D6':
-      return D6Icon;
-    case 'D8':
-      return D8Icon;
-    case 'D10':
-      return D10Icon;
-    case 'D12':
-      return D12Icon;
-    default:
-      return D4Icon;
-  }
+  return diceIcons[diceName] || D4Icon;
 };

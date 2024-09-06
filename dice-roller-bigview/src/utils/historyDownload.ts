@@ -1,6 +1,19 @@
 import { RollHistoryType } from '../types/gameTypes';
 
+/*
+- References
+- https://javascript.plainenglish.io/javascript-create-file-c36f8bccb3be
+- https://ourcodeworld.com/articles/read/189/how-to-create-a-file-and-generate-a-download-with-javascript-in-the-browser-without-a-server
+- https://developer.mozilla.org/en-US/docs/Web/API/Blob
+*/
+
 const historyDownload = (data: RollHistoryType[]) => {
+  if (!data.length) {
+    alert('History is empty! There is nothing to download.');
+    return;
+  }
+
+  // Roll History data to text (Mapper)
   const textData = data
     .map((roll, index) => {
       const dices = roll.dices

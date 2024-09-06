@@ -1,9 +1,9 @@
-import { DiceContextType } from "../types/gameTypes";
-import { createContext } from "react";
+import { DiceContextType } from '../types/gameTypes';
+import { createContext } from 'react';
 
 const DiceContext = createContext<DiceContextType>({
   selectedDices: [],
-  setSelectedDices: () => { },
+  setSelectedDices: () => {},
 });
 
 export default DiceContext;

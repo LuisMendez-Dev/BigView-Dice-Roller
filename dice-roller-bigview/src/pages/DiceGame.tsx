@@ -1,3 +1,4 @@
+import Credits from '../components/Credits';
 import DiceContext from '../context/diceDataContext';
 import DiceDisplay from '../components/DiceDisplay';
 import DiceSelector from '../components/DiceSelector';
@@ -27,11 +28,11 @@ const DiceGame = () => {
 
   return (
     <DiceContext.Provider value={{ selectedDices, setSelectedDices }}>
-      <div className='mt-10 flex h-full w-full flex-col items-center justify-center gap-10 lg:mb-5'>
+      <div className='mt-16 flex h-full w-full flex-col items-center justify-center lg:mb-5'>
         <Title />
         <div className='flex w-full max-w-7xl flex-col items-center justify-center md:w-[95%] lg:flex-row lg:gap-10'>
           {/* GAME SECTION */}
-          <div className='flex w-[95%] flex-col'>
+          <section className='mt-5 flex w-[95%] flex-col'>
             <DiceSelector />
 
             <DiceDisplay
@@ -50,19 +51,24 @@ const DiceGame = () => {
                   handleRoll={handleRoll}
                   handleResetGame={handleResetGame}
                   variants={['roll', 'reset']}
+                  aria-label='Roll dice or reset the game'
                 />
               </div>
 
               {totalRollResult > 0 && (
-                <h2 className='w-1/3 rounded-md bg-neutral-100 p-2 text-center text-3xl font-bold text-black'>
+                <h2
+                  className='w-1/3 rounded-md bg-neutral-100 p-2 text-center text-3xl font-bold text-black'
+                  aria-live='polite'
+                  role='status'
+                >
                   {totalRollResult}
                 </h2>
               )}
             </div>
-          </div>
+          </section>
 
           {/* HISTORY SECTION */}
-          <div className='mb-5 mt-10 flex w-[95%] flex-col justify-center gap-5 md:w-[95%] lg:mb-0 lg:mt-20 lg:w-[75%]'>
+          <section className='mb-5 mt-10 flex h-full w-[95%] flex-col justify-center gap-5 md:w-[95%] lg:mb-0 lg:w-[75%] 2xl:mt-20'>
             <GameHistory rollHistory={history} />
 
             {history.length > 0 && (
@@ -74,8 +80,13 @@ const DiceGame = () => {
                 handleResetHistory={handleResetHistory}
                 variants={['resetHistory', 'downloadHistory']}
                 rollHistory={history}
+                aria-label='Download or reset history'
               />
             )}
+          </section>
+
+          <div className='sm:hidden'>
+            <Credits />
           </div>
         </div>
       </div>
